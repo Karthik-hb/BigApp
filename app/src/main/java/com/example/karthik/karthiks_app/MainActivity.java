@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
             videoView = (VideoView) rootView.findViewById(R.id.videoView);
             pDialog = (ProgressBar) rootView.findViewById(R.id.prograssbar);
             playButton = (ImageView) rootView.findViewById(R.id.playbutton);
+            playButton.setClickable(false);
             pDialog.setIndeterminate(false);
             return rootView;
         }
@@ -183,27 +184,20 @@ public class MainActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
             Log.v("mainactivity" + count, "onResume");
-           /* try {
-                MediaController mediacontroller = new MediaController(
-                        getActivity());
 
-                mediacontroller.setKeepScreenOn(false);
-                mediacontroller.setAnchorView(videoView);
-           */
             Uri uri = Uri.parse("http://www.androidbegin.com/tutorial/AndroidCommercial.3gp");
             videoView.setVideoURI(uri);
-           /* } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-           */ //videoView.requestFocus();
-
 
             playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    videoView.start();
+                    if (videoView.isPlaying()) {
+                        videoView.stopPlayback();
+                        playButton.setImageResource(android.R.drawable.ic_media_play);
+                    } else {
+                        videoView.start();
+                        playButton.setImageResource(android.R.drawable.ic_media_pause);
+                    }
                 }
             });
 
@@ -221,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         public void onPause() {
             super.onPause();
             Log.v("mainactivity" + count, "onPause");
-            videoView.pause();
+            videoView.stopPlayback();
         }
 
 
